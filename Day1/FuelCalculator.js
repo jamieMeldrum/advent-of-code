@@ -1,7 +1,7 @@
 masses = parseMassesFromInput();
-fuelRequired = calculateFuelRequirement();
+fuelRequiredForModules = calculateFuelRequirementForModules();
 
-console.log("Total mass: ", fuelRequired);
+console.log("Total fuel for everything: ", fuelRequiredForModules);
 
 function parseMassesFromInput() {
     const fs = require("fs");
@@ -10,9 +10,31 @@ function parseMassesFromInput() {
     return masses;
 }
 
-function calculateFuelRequirement() {
+function calculateFuelRequirementForModules() {
     let fuelRequired = 0;
-    masses.forEach(mass => fuelRequired += calculateFuelRequiredForMass(parseInt(mass)));
+    masses.forEach(mass => {
+        let fuelRequiredForMass = calculateFuelRequiredForMass(parseInt(mass))
+        fuelRequiredForMass = addFuelRequiredForFuel(fuelRequiredForMass)
+        fuelRequired += fuelRequiredForMass;
+    });
+
+    console.log("Total fuel for modules: ", fuelRequired);
+
+    return fuelRequired;
+}
+
+function addFuelRequiredForFuel(fuelRequired) {
+    let fuelRequiredForFuel = calculateFuelRequiredForMass(fuelRequired);
+    while (fuelRequiredForFuel > 0) {
+        console.log("Fuel required for fuel: ", fuelRequiredForFuel);
+
+        fuelRequired += fuelRequiredForFuel;
+
+        console.log("Fuel required: ", fuelRequired);
+
+        fuelRequiredForFuel = calculateFuelRequiredForMass(fuelRequiredForFuel);
+    }
+
     return fuelRequired;
 }
 
