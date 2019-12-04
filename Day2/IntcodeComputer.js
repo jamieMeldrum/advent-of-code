@@ -48,9 +48,6 @@ class IntcodeComputer {
             this.memory = instruction.process(this.memory);
         }
 
-        console.log("Int array: ", this.memory.toString());
-        console.log("First val: ", this.memory[0]);
-
         return this.memory[0];
     }
 
